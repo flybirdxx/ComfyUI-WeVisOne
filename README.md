@@ -65,7 +65,11 @@ Review the dry-run output before installing. The requirements file does not requ
 
 For Mask2Alpha, install `sam2` using the [official SAM2 instructions](https://github.com/facebookresearch/sam2#installation) if it is missing. The corresponding upstream submodule revision is `2b90b9f5ceec907a1c18123530e92e794ad901a4`. On Windows, `SAM2_BUILD_CUDA=0` can disable the optional CUDA extension while retaining your existing Torch build.
 
-Restart ComfyUI and refresh the browser after initial installation. Updating only the preview-brightness code in 0.2.1 requires a browser refresh.
+Restart ComfyUI and refresh the browser after initial installation or after adding/updating locale files.
+
+### Interface language
+
+Node names, parameter labels/tooltips, output labels and the box-editor button follow **ComfyUI Settings → Comfy → Locale**. English is the default/fallback language; selecting Chinese switches the interface to Simplified Chinese. Existing box-editor buttons update when the language changes. Node IDs, input keys and task values remain unchanged, so saved workflows stay compatible.
 
 ## Model downloads
 
@@ -95,7 +99,7 @@ Model discovery also checks `wevisone` and `LLM` directories configured in `extr
 
 Import [05_draw_boxes.json](examples/05_draw_boxes.json), select an image in Load Image, choose a model, and redraw the selection on the box-editor canvas. Upload the included [matting-input.jpg](assets/screenshots/matting-input.jpg) or use your own image. Select the image again after importing a workflow.
 
-In an existing workflow, click **Add / locate image box editor** (currently labeled **添加／定位图片框选** in the UI) to connect the image and `bboxes` automatically. Drag inside a box to move it, drag an edge or handle to resize it, and press Delete to remove the selected box. Multiple boxes are supported; Mask2Alpha's `bbox` mode requires exactly one box per image.
+In an existing workflow, click **Add / locate image box editor** to connect the image and `bboxes` automatically. Drag inside a box to move it, drag an edge or handle to resize it, and press Delete to remove the selected box. Multiple boxes are supported; Mask2Alpha's `bbox` mode requires exactly one box per image.
 
 The canvas displays the first image of a batch, and the same boxes apply to every image in that batch. Coordinates are saved with the workflow and mapped back to the original dimensions. If the connected processing node has not run and has no preview, execute the box-editor node by itself first to obtain its background image.
 

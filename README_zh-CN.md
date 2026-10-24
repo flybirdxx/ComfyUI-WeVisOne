@@ -67,7 +67,11 @@ git clone https://github.com/flybirdxx/ComfyUI-WeVisOne.git
 
 若需要 Mask2Alpha，但没有 `sam2`，按 [SAM2 官方安装说明](https://github.com/facebookresearch/sam2#installation)安装。对应上游子模块 revision 为 `2b90b9f5ceec907a1c18123530e92e794ad901a4`；Windows 可使用 `SAM2_BUILD_CUDA=0` 禁用可选 CUDA 扩展，保留现有 Torch 构建。
 
-首次安装后重启 ComfyUI 并刷新浏览器。仅更新 0.2.1 的亮度绘制代码时，刷新浏览器即可。
+首次安装或新增／更新语言文件后，重启 ComfyUI 并刷新浏览器。
+
+### 界面语言
+
+节点名称、参数名称与提示、输出名称和框选按钮跟随 **ComfyUI 设置 → Comfy → 语言（Locale）**。默认／回退语言为英文，选择中文后显示简体中文，已有框选按钮也会随语言设置更新。节点 ID、输入键和任务值保持不变，已有工作流继续兼容。
 
 ## 模型下载
 

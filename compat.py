@@ -78,10 +78,10 @@ class ComfyWeVisOneVL(WeVisOneVL):
         if self.tokenizer.pad_token_id is None:
             self.tokenizer.pad_token = self.tokenizer.eos_token
         if "<OBJ>" not in self.tokenizer.get_vocab():
-            raise ValueError("官方 tokenizer 中缺少 <OBJ>。")
+            raise ValueError("The official tokenizer is missing the <OBJ> token.")
         self.seg_token_id = self.tokenizer.convert_tokens_to_ids("<OBJ>")
         if sidecar.get("seg_token_id", self.seg_token_id) != self.seg_token_id:
-            raise ValueError("tokenizer 与 mask_decoder.pt 的 <OBJ> ID 不一致。")
+            raise ValueError("The tokenizer and mask_decoder.pt have different <OBJ> token IDs.")
         config_data = json.loads((path / "config.json").read_text(encoding="utf-8"))
         if Version(transformers.__version__).major < 5:
             config_data = legacy_config(config_data)
@@ -91,7 +91,7 @@ class ComfyWeVisOneVL(WeVisOneVL):
             local_files_only=True, low_cpu_mem_usage=True, output_loading_info=True,
         )
         if any(loading.get(key) for key in ("missing_keys", "unexpected_keys", "mismatched_keys", "error_msgs")):
-            raise RuntimeError(f"模型权重结构不匹配：{loading}")
+            raise RuntimeError(f"Model weight structure mismatch: {loading}")
         self.mask_decoder = build_mask_decoder_from_qwen(self.model, self.cfg)
         self.mask_decoder.load_state_dict(sidecar["state_dict"], strict=True)
         self.mask_decoder.to(dtype=dtype).eval()

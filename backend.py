@@ -55,9 +55,9 @@ def prepare_result(index, image, result, task):
 
 def run_inference(request, images, prompt_masks=None):
     if request["device"] not in {"auto", "cpu"}:
-        raise ValueError("device 必须是 auto 或 cpu。")
+        raise ValueError("device must be auto or cpu.")
     if len(images) == 0:
-        raise ValueError("图像 batch 不能为空。")
+        raise ValueError("The image batch cannot be empty.")
     device = mm.get_torch_device() if request["device"] == "auto" else torch.device("cpu")
     mm.throw_exception_if_processing_interrupted()
     if request["kind"] == "vl":

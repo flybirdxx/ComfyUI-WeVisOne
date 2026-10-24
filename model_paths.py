@@ -40,19 +40,19 @@ def discover_models():
 def resolve_model(name):
     path = discover_models().get(name)
     if path is None:
-        raise FileNotFoundError("未找到模型。请按 README 将官方完整模型放入 models/wevisone 后刷新节点。")
+        raise FileNotFoundError("Model not found. Follow README to place the complete official model in models/wevisone, then refresh the node.")
     config = json.loads((path / "config.json").read_text(encoding="utf-8"))
     if config.get("model_type") != "qwen3_vl":
-        raise ValueError("请选择官方 WeVisOne-VL 模型目录。")
+        raise ValueError("Select an official WeVisOne-VL model directory.")
     weights = list(path.glob("*.safetensors"))
     if not weights:
-        raise FileNotFoundError(f"模型权重缺失：{path}")
+        raise FileNotFoundError(f"Missing model weights: {path}")
     index = path / "model.safetensors.index.json"
     if index.is_file():
         for shard in set(json.loads(index.read_text(encoding="utf-8"))["weight_map"].values()):
             target = (path / shard).resolve()
             if not target.is_relative_to(path) or not target.is_file():
-                raise FileNotFoundError(f"模型分片缺失或越界：{shard}")
+                raise FileNotFoundError(f"Model shard is missing or outside the model directory: {shard}")
     return path
 
 

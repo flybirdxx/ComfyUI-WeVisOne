@@ -1,5 +1,6 @@
 import { app } from "../../scripts/app.js";
 import { watchBoxPreviews } from "./box_preview.js";
+import { currentMessages, localizeBoxButton } from "./i18n.js";
 
 const EDITOR = "WeVisOneBoxEditor";
 const TARGETS = new Set(["WeVisOnePerception", "WeVisOneMask2Alpha"]);
@@ -8,12 +9,12 @@ export function connectBoxEditor(target, appInstance, createNode) {
     const graph = target.graph;
     const imageLink = target.getInputLink(target.findInputSlot("images"));
     const source = imageLink && graph?.getNodeById(imageLink.origin_id);
-    if (!source) throw new Error("请先连接 WeVisOne 的 images 输入，再添加框选节点。");
+    if (!source) throw new Error(currentMessages(appInstance).connectImage);
     const boxSlot = target.findInputSlot("bboxes");
     let editor = target.getInputNode(boxSlot);
     if (editor?.comfyClass !== EDITOR && editor?.type !== EDITOR) {
         editor = createNode(EDITOR);
-        if (!editor) throw new Error("图片框选节点未加载，请重启 ComfyUI 并刷新页面。");
+        if (!editor) throw new Error(currentMessages(appInstance).missingEditor);
         const nearby = graph.nodes.filter(n => Math.abs(n.pos[0] - source.pos[0]) < 440);
         editor.pos = [source.pos[0], Math.max(...nearby.map(n => n.pos[1] + n.size[1]), source.pos[1]) + 60];
         graph.add(editor);
@@ -38,12 +39,13 @@ app.registerExtension({
             node.setSize([Math.max(node.size[0], 480), Math.max(node.size[1], 640)]);
         }
         if (!TARGETS.has(name)) return;
-        node.addWidget("button", "添加／定位图片框选", null, () => {
+        const widget = node.addWidget("button", "open_box_editor", null, () => {
             try {
                 connectBoxEditor(node, app, type => window.LiteGraph.createNode(type));
             } catch (error) {
-                app.extensionManager.toast.add({severity: "warn", summary: "WeVisOne 图片框选", detail: error.message, life: 5000});
+                app.extensionManager.toast.add({severity: "warn", summary: currentMessages(app).title, detail: error.message, life: 5000});
             }
         }, {serialize: false});
+        localizeBoxButton(node, widget, app);
     },
 });
